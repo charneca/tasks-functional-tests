@@ -1,5 +1,7 @@
 package tasks.functional;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
@@ -7,22 +9,27 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 
 public class TasksTest {
 	
-	public WebDriver acederApp()
+	public WebDriver acederApp() throws MalformedURLException
 	{
 		System.setProperty("webdriver.chrome.driver","C:\\Local\\devops\\selenium\\chromedriver.exe");
-		WebDriver driver = new ChromeDriver();
-		driver.navigate().to("http://localhost:8001/tasks");
+		//WebDriver driver = new ChromeDriver();
+		DesiredCapabilities cap = DesiredCapabilities.chrome();
+		WebDriver driver = new RemoteWebDriver(new URL("http://192.168.31.79:4444/wd/hub"), cap);
+
+		driver.navigate().to("http://192.168.31.79:8001/tasks");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		
 		return driver;
 	}
 	
 	@Test
-	public void deveGravarTarefaComSucesso()
+	public void deveGravarTarefaComSucesso() throws MalformedURLException
 	{
 		WebDriver driver = acederApp();
 		try {
@@ -49,7 +56,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naodeveGravarSemDesc()
+	public void naodeveGravarSemDesc() throws MalformedURLException
 	{
 		WebDriver driver = acederApp();
 		try {
@@ -73,7 +80,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void naoDeveGravarTarefaSemData()
+	public void naoDeveGravarTarefaSemData() throws MalformedURLException
 	{
 		WebDriver driver = acederApp();
 		try {
@@ -97,7 +104,7 @@ public class TasksTest {
 	}
 	
 	@Test
-	public void deveGravarTarefaComDataAntiga()
+	public void deveGravarTarefaComDataAntiga() throws MalformedURLException
 	{
 		WebDriver driver = acederApp();
 		try {
